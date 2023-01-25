@@ -2,17 +2,29 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import List from "../../components/List/List";
 import useFetch from "../../hooks/useFetch";
+import Typography from "@material-ui/core/Typography";
+import Slider from "@material-ui/core/Slider";
 import "./Products.scss";
 
 const Products = () => {
   const catId = parseInt(useParams().id);
-  const [maxPrice, setMaxPrice] = useState(1000);
-  const [sort, setSort] = useState(null);
+  const [priceRange, setPriceRange] = useState([0, 1000]);
+  const [priceFilter, setPriceFilter] = useState(1000);
+  const [sort, setSort] = useState("asc");
   const [selectedSubCats, setSelectedSubCats] = useState([]);
 
   const { data, loading, error } = useFetch(
     `/sub-categories?[filters][categories][id][$eq]=${catId}`
   );
+
+  const rangeSelector = (e, newValue) => {
+    setPriceRange(newValue);
+  };
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    setPriceFilter(priceRange[1]);
+  };
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -44,14 +56,21 @@ const Products = () => {
         <div className="filterItem">
           <h2>Filter by price</h2>
           <div className="inputItem">
-            <span>0</span>
-            <input
-              type="range"
+            <Typography id="range-slider" gutterBottom>
+              Select Price Range:
+            </Typography>
+
+            <Slider
+              value={priceRange}
+              onChange={rangeSelector}
               min={0}
               max={1000}
-              onChange={(e) => setMaxPrice(e.target.value)}
+              step={10}
+              valueLabelDisplay="auto"
             />
-            <span>{maxPrice}</span>
+            <div className="applyPriceBtn" onClick={handleClick}>
+              Apply
+            </div>
           </div>
         </div>
         <div className="filterItem">
@@ -84,7 +103,12 @@ const Products = () => {
           src="https://static-cse.canva.com/blob/572626/1.magebyRodionKutsaevviaUnsplash.jpg"
           alt=""
         />
-        <List catId={catId} maxPrice={maxPrice} sort={sort} subCats={selectedSubCats}/>
+        <List
+          catId={catId}
+          maxPrice={priceFilter}
+          sort={sort}
+          subCats={selectedSubCats}
+        />
       </div>
     </div>
   );

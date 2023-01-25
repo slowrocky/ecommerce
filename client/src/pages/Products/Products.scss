@@ -9,17 +9,38 @@
     top: 50px;
 
     .filterItem {
+      display: flex;
+      flex-direction: column;
       margin-bottom: 30px;
 
-      h2{
+      h2 {
         font-weight: 400;
         margin-bottom: 30px;
       }
 
       .inputItem {
         margin-bottom: 10px;
-        label{
+        width: fit-content;
+        display: block;
+
+        label {
           margin-left: 10px;
+        }
+
+        .applyPriceBtn {
+          width: fit-content;
+          margin: 0 auto;
+          padding: 8px;
+          background-color: #29467e;
+          color: white;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+
+        .applyPriceBtn:active {
+          background-color: white;
+          color:black;
+          border: 1px solid black;
         }
       }
     }
